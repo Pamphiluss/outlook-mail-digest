@@ -1,4 +1,4 @@
 interface:
   display_name: "Outlook Mail Digest"
-  short_description: "Summarize Outlook messages by receiving address with prioritized next steps"
-  default_prompt: "Summarize today's new Outlook messages and group them by receiving address."
+  short_description: "Create structured multi-account Outlook briefings with semantic priorities"
+  default_prompt: "Create today's structured Outlook briefing by account and receiving address. Deduplicate forwarded copies and prioritize by content, not Focused Inbox placement."
