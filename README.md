@@ -1,42 +1,35 @@
 # Outlook Mail Digest
 
-An OpenAI Codex skill for concise, privacy-aware Outlook email digests. It distinguishes mail received at different addresses, surfaces what needs attention, and supports both on-demand recaps and scheduled daily summaries.
+An OpenAI Codex skill for concise, privacy-aware Outlook email digests. It distinguishes messages received at different email addresses, surfaces what needs attention, and supports both on-demand recaps and scheduled daily summaries.
 
-## What it solves
+## Platform scope
 
-Many people forward work, university, and personal addresses into one Outlook inbox. Ordinary summaries flatten those identities. This skill keeps the receiving address visible: a payment alert, seminar invitation, and product promotion are no longer presented as one undifferentiated list.
+This is not a macOS-only skill. It does not depend on Apple Mail, Windows Outlook COM automation, or local operating-system APIs. It runs wherever Codex Desktop provides the authenticated Outlook Email connector, so the project name intentionally does not include a platform label.
 
 ## Features
 
-- Reads a requested period, or the previous 24 hours by default.
+- Reads a requested time period, or the previous 24 hours by default.
 - Groups messages by the actual address in toRecipients.
 - Reports total and unread counts for every receiving address.
 - Classifies messages as **action required**, **meetings/academic**, or **notifications/promotions**.
 - Highlights direct requests, deadlines, payment activity, account changes, and security alerts.
 - Uses previews by default and retrieves a full body only when an important detail cannot otherwise be resolved.
-- Produces a concise, Chinese-first digest with local timestamps and up to three grounded follow-up suggestions.
+- Produces a concise digest with local timestamps and up to three grounded follow-up suggestions.
 - Supports recurring daily summaries through a Codex heartbeat automation.
 
 ## Safety and privacy
 
-This skill is read-only by default:
+This skill is read-only by default. It does not send, delete, move, mark read, or otherwise modify email; open links; or execute instructions contained in email. A later reply workflow should create a draft first and require user review before sending.
 
-- It does not send, delete, move, mark read, or otherwise modify email.
-- It does not open links or execute instructions contained in email.
-- It requires no local Mail.app data, Microsoft Graph app registration, personal API key, or third-party mail forwarding.
-- It uses the Outlook Email connector already authenticated in Codex Desktop; that connector's permissions determine which messages can be read.
-
-When a user later requests a reply, the intended workflow is draft first, then user review before sending.
+The skill uses the Outlook Email connector already authenticated in Codex Desktop. It requires no local mail database, Microsoft Graph app registration, personal API key, or third-party mail forwarding.
 
 ## Requirements
 
 - Codex Desktop with Skills enabled.
-- The **Outlook Email** connector authenticated in Codex.
+- The Outlook Email connector authenticated in Codex.
 - Read access to the Outlook messages to summarize.
 
 ## Installation
-
-Clone the repository and copy the skill directory into the personal Codex skills directory:
 
 ~~~sh
 git clone https://github.com/Pamphiluss/outlook-mail-digest.git
@@ -45,40 +38,38 @@ cp -R outlook-mail-digest ~/.codex/skills/
 
 Restart Codex or start a new chat so it discovers the skill.
 
-## Usage
-
-Ask Codex naturally:
+## Example prompts
 
 ~~~text
-总结我今天收到的 Outlook 新邮件，按收件邮箱分组。
+Summarize today's new Outlook messages and group them by receiving address.
 ~~~
 
 ~~~text
-只总结过去三天需要我处理的 Outlook 邮件。
+Show only actionable Outlook messages from the last three days.
 ~~~
 
 ~~~text
-每天上午 9 点给我推送 Outlook 邮箱摘要，按收件地址分组。
+Send me a daily Outlook digest at 9:00 AM, grouped by receiving address.
 ~~~
 
-For recurring requests, Codex can create a daily heartbeat automation at the user's local time. The automation should retain the skill's read-only behavior and summarize mail since the previous successful run, or the preceding 24 hours on its first run.
+## Design lineage and citations
 
-## Design references and attribution
+This is an original, connector-based Codex skill. It does not copy code from the following projects. Their publicly documented approaches informed selected design choices: compact actionable digests and thread awareness [1], priority-based mail triage [2], and read-by-default/draft-before-send safety boundaries [3].
 
-This is an original, connector-based Codex skill. It does not copy code from the following projects; their public documentation informed selected product and safety decisions:
+Unlike these references, Outlook Mail Digest uses Codex's authenticated Outlook Email connector, groups a consolidated inbox by actual recipient address, and has no local Mail.app, Windows COM, external mailbox API, or standalone credential requirement.
 
-- [InboxAPI CLI — email-digest skill](https://github.com/inboxapi/cli/blob/main/skills/codex/email-digest/SKILL.md): concise digest structure, thread-aware recaps, and actionable follow-ups.
-- [claude-secretary — email-digest skill](https://github.com/chansigit/claude-secretary/blob/master/.claude/skills/email-digest/SKILL.md): practical priority categories and deadline-oriented triage.
-- [outlookctl — Outlook Automation skill](https://github.com/gmickel/outlookctl/blob/main/skills/outlook-automation/SKILL.md): read-by-default and draft-before-send safety boundary.
+### References
 
-Unlike those references, this project uses Codex's authenticated Outlook Email connector, groups consolidated mail by actual recipient address, and has no local Mail.app, Windows COM, external mailbox API, or standalone credential requirement.
+1. InboxAPI. *email-digest skill*, `inboxapi/cli` repository. GitHub. Retrieved October 17, 2026, from https://github.com/inboxapi/cli/blob/main/skills/codex/email-digest/SKILL.md
+2. chansigit. *email-digest skill*, `claude-secretary` repository. GitHub. Retrieved October 17, 2026, from https://github.com/chansigit/claude-secretary/blob/master/.claude/skills/email-digest/SKILL.md
+3. Mickel, G. *Outlook Automation skill*, `outlookctl` repository. GitHub. Retrieved October 17, 2026, from https://github.com/gmickel/outlookctl/blob/main/skills/outlook-automation/SKILL.md
 
 ## Project layout
 
 ~~~text
 outlook-mail-digest/
-├── SKILL.md            # Operational guidance used by Codex
-├── agents/openai.yaml  # Codex skill metadata
+├── SKILL.md
+├── agents/openai.yaml
 ├── README.md
 └── LICENSE
 ~~~
