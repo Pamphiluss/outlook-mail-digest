@@ -1,4 +1,4 @@
 interface:
-  display_name: "Outlook 邮箱摘要"
-  short_description: "按收件邮箱归类 Outlook 邮件并生成可执行摘要"
-  default_prompt: "总结我今天的 Outlook 新邮件，按收件邮箱分组。"
+  display_name: "Outlook Mail Digest"
+  short_description: "Summarize Outlook messages by receiving address with prioritized next steps"
+  default_prompt: "Summarize today's new Outlook messages and group them by receiving address."
